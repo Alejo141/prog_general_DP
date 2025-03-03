@@ -47,7 +47,6 @@ if opcion == "Facturación":
         df_filtrado["p_final"] = pd.to_datetime(df_filtrado["p_final"], errors='coerce').dt.strftime('%Y-%m-%d')
 
         df_filtrado["address"] = df_filtrado["address"].astype(str).str.upper()
-        df_filtrado["localidad"] = df_filtrado["localidad"].astype(str).str.upper()
 
         st.success("✅ Archivo procesado correctamente.")
         st.dataframe(df_filtrado)
