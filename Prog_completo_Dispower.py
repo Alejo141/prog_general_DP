@@ -33,7 +33,7 @@ if opcion == "Facturación":
 
     if archivo is not None:
         df = pd.read_excel(archivo)
-        columnas_deseadas = [archivo, "nfacturasiigo", "nui", "identificacion", "address", "cantidad", "p_inicial", "p_final", "fechaemi",  "mes", "ano"]
+        columnas_deseadas = ["nfacturasiigo", "nui", "identificacion", "address", "cantidad", "p_inicial", "p_final", "fechaemi",  "mes", "ano"]
 
         # Filtrar columnas
         df_filtrado = df[columnas_deseadas]
