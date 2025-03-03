@@ -47,6 +47,9 @@ if opcion == "Facturación":
         # Agregar el nombre del archivo como una nueva columna
         df_filtrado.insert(0, "nombre_archivo", nombre_archivo)
 
+        # Reemplazar valores vacíos o NaN con "NA"
+        df_filtrado.fillna("NA", inplace=True)
+
         # Limpieza de datos
         if "nfacturasiigo" in df_filtrado.columns:
             df_filtrado["nfacturasiigo"] = df_filtrado["nfacturasiigo"].astype(str).str.replace("-", "", regex=True)
@@ -54,11 +57,11 @@ if opcion == "Facturación":
             df_filtrado["nui"] = df_filtrado["nui"].astype(str).str.replace("-", "", regex=True)
 
         if "fechaemi" in df_filtrado.columns:
-            df_filtrado["fechaemi"] = pd.to_datetime(df_filtrado["fechaemi"], errors='coerce').dt.strftime('%Y-%m-%d')
+            df_filtrado["fechaemi"] = pd.to_datetime(df_filtrado["fechaemi"], errors='coerce').dt.strftime('%Y-%m-%d').fillna("NA")
         if "p_inicial" in df_filtrado.columns:
-            df_filtrado["p_inicial"] = pd.to_datetime(df_filtrado["p_inicial"], errors='coerce').dt.strftime('%Y-%m-%d')
+            df_filtrado["p_inicial"] = pd.to_datetime(df_filtrado["p_inicial"], errors='coerce').dt.strftime('%Y-%m-%d').fillna("NA")
         if "p_final" in df_filtrado.columns:
-            df_filtrado["p_final"] = pd.to_datetime(df_filtrado["p_final"], errors='coerce').dt.strftime('%Y-%m-%d')
+            df_filtrado["p_final"] = pd.to_datetime(df_filtrado["p_final"], errors='coerce').dt.strftime('%Y-%m-%d').fillna("NA")
 
         if "address" in df_filtrado.columns:
             df_filtrado["address"] = df_filtrado["address"].astype(str).str.upper()
@@ -72,6 +75,7 @@ if opcion == "Facturación":
 
         csv = generar_csv(df_filtrado)
         st.download_button(label="📥 Descargar CSV", data=csv, file_name="facturacion_procesada.csv", mime="text/csv")
+
 
 # ------------------- SECCIÓN DE CARTERA -------------------
 elif opcion == "Cartera":
