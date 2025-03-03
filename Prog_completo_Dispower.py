@@ -25,6 +25,8 @@ def generar_csv(df):
     output.seek(0)
     return output
 
+import unidecode  # Librería para eliminar tildes
+
 # ------------------- SECCIÓN DE FACTURACIÓN -------------------
 if opcion == "Facturación":
     st.subheader("📄 Procesamiento de Facturación")
@@ -64,7 +66,8 @@ if opcion == "Facturación":
             df_filtrado["p_final"] = pd.to_datetime(df_filtrado["p_final"], errors='coerce').dt.strftime('%Y-%m-%d').fillna("NA")
 
         if "address" in df_filtrado.columns:
-            df_filtrado["address"] = df_filtrado["address"].astype(str).str.upper()
+            df_filtrado["address"] = df_filtrado["address"].astype(str).str.upper()  # Convertir a mayúsculas
+            df_filtrado["address"] = df_filtrado["address"].apply(lambda x: unidecode.unidecode(x))  # Eliminar tildes
 
         st.success("✅ Archivo procesado correctamente.")
         st.dataframe(df_filtrado)
@@ -76,6 +79,7 @@ if opcion == "Facturación":
         csv = generar_csv(df_filtrado)
         st.download_button(label="📥 Descargar CSV", data=csv, file_name="facturacion_procesada.csv", mime="text/csv")
 
+# ------------------- SECCIÓN DE FACTURACIÓN -------------------
 
 # ------------------- SECCIÓN DE CARTERA -------------------
 elif opcion == "Cartera":
