@@ -81,7 +81,7 @@ elif opcion == "Cartera":
 
     if archivo is not None:
         df = pd.read_excel(archivo)
-        columnas_deseadas = ["Identificación", "NUI", "Factura", "Centro de costo", "Saldo Factura", "Mes de Cobro"]
+        columnas_deseadas = ["Identificación", "NUI", "Factura", "Proyecto", "Saldo Factura", "Mes de Cobro"]
 
         # Filtrar columnas disponibles
         columnas_presentes = [col for col in columnas_deseadas if col in df.columns]
@@ -93,8 +93,8 @@ elif opcion == "Cartera":
         if "Factura" in df_filtrado.columns:
             df_filtrado["Factura"] = df_filtrado["Factura"].astype(str).str.replace("-", "", regex=True)
 
-        if "Centro de costo" in df_filtrado.columns:
-            df_filtrado["Centro de costo"] = df_filtrado["Centro de costo"].astype(str).str.upper()
+        if "Proyecto" in df_filtrado.columns:
+            df_filtrado["Proyecto"] = df_filtrado["Proyecto"].astype(str).str.upper()
 
         df_filtrado.fillna("NA", inplace=True)
 
