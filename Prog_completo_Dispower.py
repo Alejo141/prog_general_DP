@@ -33,20 +33,35 @@ if opcion == "Facturación":
 
     if archivo is not None:
         df = pd.read_excel(archivo)
-        columnas_deseadas = ["nfacturasiigo", "nui", "identificacion", "address", "cantidad", "p_inicial", "p_final", "fechaemi",  "mes", "ano"]
+
+        # Obtener el nombre del archivo
+        nombre_archivo = archivo.name  
+
+        # Definir las columnas a filtrar
+        columnas_deseadas = ["nfacturasiigo", "nui", "identificacion", "address", "cantidad", "p_inicial", "p_final", "fechaemi", "mes", "ano"]
+        columnas_presentes = [col for col in columnas_deseadas if col in df.columns]
 
         # Filtrar columnas
-        df_filtrado = df[columnas_deseadas]
+        df_filtrado = df[columnas_presentes]
+
+        # Agregar el nombre del archivo como una nueva columna
+        df_filtrado.insert(0, "nombre_archivo", nombre_archivo)
 
         # Limpieza de datos
-        df_filtrado["nfacturasiigo"] = df_filtrado["nfacturasiigo"].astype(str).str.replace("-", "", regex=True)
-        df_filtrado["nui"] = df_filtrado["nui"].astype(str).str.replace("-", "", regex=True)
+        if "nfacturasiigo" in df_filtrado.columns:
+            df_filtrado["nfacturasiigo"] = df_filtrado["nfacturasiigo"].astype(str).str.replace("-", "", regex=True)
+        if "nui" in df_filtrado.columns:
+            df_filtrado["nui"] = df_filtrado["nui"].astype(str).str.replace("-", "", regex=True)
 
-        df_filtrado["fechaemi"] = pd.to_datetime(df_filtrado["fechaemi"], errors='coerce').dt.strftime('%Y-%m-%d')
-        df_filtrado["p_inicial"] = pd.to_datetime(df_filtrado["p_inicial"], errors='coerce').dt.strftime('%Y-%m-%d')
-        df_filtrado["p_final"] = pd.to_datetime(df_filtrado["p_final"], errors='coerce').dt.strftime('%Y-%m-%d')
+        if "fechaemi" in df_filtrado.columns:
+            df_filtrado["fechaemi"] = pd.to_datetime(df_filtrado["fechaemi"], errors='coerce').dt.strftime('%Y-%m-%d')
+        if "p_inicial" in df_filtrado.columns:
+            df_filtrado["p_inicial"] = pd.to_datetime(df_filtrado["p_inicial"], errors='coerce').dt.strftime('%Y-%m-%d')
+        if "p_final" in df_filtrado.columns:
+            df_filtrado["p_final"] = pd.to_datetime(df_filtrado["p_final"], errors='coerce').dt.strftime('%Y-%m-%d')
 
-        df_filtrado["address"] = df_filtrado["address"].astype(str).str.upper()
+        if "address" in df_filtrado.columns:
+            df_filtrado["address"] = df_filtrado["address"].astype(str).str.upper()
 
         st.success("✅ Archivo procesado correctamente.")
         st.dataframe(df_filtrado)
