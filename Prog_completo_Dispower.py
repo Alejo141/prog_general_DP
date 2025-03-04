@@ -102,6 +102,7 @@ elif opcion == "Cartera":
 
         if "PROYECTO" in df_filtrado.columns:
             df_filtrado["PROYECTO"] = df_filtrado["PROYECTO"].astype(str).str.upper()
+            df_filtrado["PROYECTO"] = df_filtrado["PROYECTO"].apply(lambda x: unidecode.unidecode(x))  # Eliminar tildes
 
         df_filtrado.fillna("NA", inplace=True)
 
