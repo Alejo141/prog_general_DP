@@ -92,7 +92,7 @@ elif opcion == "Cartera":
 
         # Filtrar columnas disponibles
         columnas_presentes = [col for col in columnas_deseadas if col in df.columns]
-        df_filtrado = df[columnas_presentes]
+        df_filtrado = df[columnas_presentes].copy()
 
         # Limpieza de datos
         if "NUI" in df_filtrado.columns:
@@ -112,8 +112,15 @@ elif opcion == "Cartera":
         # Procesamiento del "Mes de Cobro"
         if "Mes de Cobro" in df_filtrado.columns:
             df_filtrado["Mes de Cobro"] = df_filtrado["Mes de Cobro"].astype(str)
+            
+            # Separar mes y año
             df_mes_anio = df_filtrado["Mes de Cobro"].str.split(" ", expand=True).fillna("")
-            df_mes_anio.columns = ["mes", "año"]
+            
+            if df_mes_anio.shape[1] == 2:  # Verifica si la separación se hizo correctamente
+                df_mes_anio.columns = ["mes", "año"]
+            else:
+                df_mes_anio["mes"] = ""
+                df_mes_anio["año"] = ""
 
             meses_dict = {
                 "enero": 1, "febrero": 2, "marzo": 3, "abril": 4, "mayo": 5, "junio": 6,
@@ -123,15 +130,29 @@ elif opcion == "Cartera":
             df_mes_anio["mes"] = df_mes_anio["mes"].str.lower().map(meses_dict)
             df_mes_anio["año"] = pd.to_numeric(df_mes_anio["año"], errors='coerce')
 
-            # Unir las columnas procesadas al DataFrame y eliminar "Mes de Cobro"
+            # Eliminar "Mes de Cobro" y agregar "mes" y "año"
             df_filtrado = df_filtrado.drop(columns=["Mes de Cobro"]).reset_index(drop=True)
-            df_filtrado = pd.concat([df_filtrado, df_mes_anio], axis=1)
+            df_filtrado = pd.concat([df_filtrado, df_mes_anio[["mes", "año"]]], axis=1)
 
         # Agregar el nombre del archivo
         df_filtrado.insert(0, "nombre_archivo", archivo.name)
 
         st.success("✅ Archivo procesado correctamente.")
         st.dataframe(df_filtrado)
+
+        # Generar archivo para descargar
+        @st.cache_data
+        def generar_csv(df):
+            return df.to_csv(index=False).encode("utf-8")
+
+        @st.cache_data
+        def generar_xlsx(df):
+            from io import BytesIO
+            output = BytesIO()
+            with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
+                df.to_excel(writer, index=False, sheet_name="Cartera Procesada")
+            processed_data = output.getvalue()
+            return processed_data
 
         # Botones de descarga
         xlsx = generar_xlsx(df_filtrado)
