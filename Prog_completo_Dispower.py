@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from io import BytesIO
 import os
-import unidecode  # Librería para eliminar tildes
+import unidecode  # type: ignore # Librería para eliminar tildes
 
 # Configuración inicial de la app
 st.set_page_config(page_title="Captura de Datos", page_icon="📊", layout="centered")
