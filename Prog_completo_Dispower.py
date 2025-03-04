@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from io import BytesIO
 import os
+import unidecode  # Librería para eliminar tildes
 
 # Configuración inicial de la app
 st.set_page_config(page_title="Captura de Datos", page_icon="📊", layout="centered")
@@ -24,8 +25,6 @@ def generar_csv(df):
     df.to_csv(output, index=False, encoding='utf-8')
     output.seek(0)
     return output
-
-import unidecode  # Librería para eliminar tildes
 
 # ------------------- SECCIÓN DE FACTURACIÓN -------------------
 if opcion == "Facturación":
@@ -89,7 +88,7 @@ elif opcion == "Cartera":
 
     if archivo is not None:
         df = pd.read_excel(archivo)
-        columnas_deseadas = ["Identificación", "NUI", "Factura", "Proyecto", "Saldo Factura", "Mes de Cobro"]
+        columnas_deseadas = ["Identificación", "NUI", "Factura", "PROYECTO", "Saldo Factura", "Mes de Cobro"]
 
         # Filtrar columnas disponibles
         columnas_presentes = [col for col in columnas_deseadas if col in df.columns]
@@ -101,8 +100,8 @@ elif opcion == "Cartera":
         if "Factura" in df_filtrado.columns:
             df_filtrado["Factura"] = df_filtrado["Factura"].astype(str).str.replace("-", "", regex=True)
 
-        if "Proyecto" in df_filtrado.columns:
-            df_filtrado["Proyecto"] = df_filtrado["Proyecto"].astype(str).str.upper()
+        if "PROYECTO" in df_filtrado.columns:
+            df_filtrado["PROYECTO"] = df_filtrado["PROYECTO"].astype(str).str.upper()
 
         df_filtrado.fillna("NA", inplace=True)
 
