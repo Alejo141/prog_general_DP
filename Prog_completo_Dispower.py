@@ -84,59 +84,61 @@ if opcion == "Facturación":
 elif opcion == "Cartera":
     st.subheader("💰 Procesamiento de Cartera")
 
-    archivo = st.file_uploader("📂 Cargar archivo Excel", type=["xlsx"])
+archivo = st.file_uploader("📂 Cargar archivo Excel", type=["xlsx"])
 
-    if archivo is not None:
-        df = pd.read_excel(archivo)
-        columnas_deseadas = ["Identificación", "NUI", "Factura", "PROYECTO", "Saldo Factura", "Mes de Cobro"]
+if archivo is not None:
+    df = pd.read_excel(archivo)
+    columnas_deseadas = ["Identificación", "NUI", "Factura", "PROYECTO", "Saldo Factura", "Mes de Cobro"]
 
-        # Filtrar columnas disponibles
-        columnas_presentes = [col for col in columnas_deseadas if col in df.columns]
-        df_filtrado = df[columnas_presentes]
+    # Filtrar columnas disponibles
+    columnas_presentes = [col for col in columnas_deseadas if col in df.columns]
+    df_filtrado = df[columnas_presentes]
 
-        # Limpieza de datos
-        if "NUI" in df_filtrado.columns:
-            df_filtrado["NUI"] = df_filtrado["NUI"].astype(str).str.replace("-", "", regex=True)
-        if "Factura" in df_filtrado.columns:
-            df_filtrado["Factura"] = df_filtrado["Factura"].astype(str).str.replace("-", "", regex=True)
+    # Limpieza de datos
+    if "NUI" in df_filtrado.columns:
+        df_filtrado["NUI"] = df_filtrado["NUI"].astype(str).str.replace("-", "", regex=True)
+    if "Factura" in df_filtrado.columns:
+        df_filtrado["Factura"] = df_filtrado["Factura"].astype(str).str.replace("-", "", regex=True)
 
-        if "PROYECTO" in df_filtrado.columns:
-            df_filtrado["PROYECTO"] = df_filtrado["PROYECTO"].astype(str).str.upper()
-            df_filtrado["PROYECTO"] = df_filtrado["PROYECTO"].apply(lambda x: unidecode.unidecode(x))  # Eliminar tildes
+    if "PROYECTO" in df_filtrado.columns:
+        df_filtrado["PROYECTO"] = df_filtrado["PROYECTO"].astype(str).str.upper()
+        df_filtrado["PROYECTO"] = df_filtrado["PROYECTO"].apply(lambda x: unidecode.unidecode(x))  # Eliminar tildes
 
-        df_filtrado.fillna("NA", inplace=True)
+    df_filtrado.fillna("NA", inplace=True)
 
-        if "Factura" in df_filtrado.columns:
-            df_filtrado = df_filtrado[df_filtrado["Factura"] != "NA"]
+    if "Factura" in df_filtrado.columns:
+        df_filtrado = df_filtrado[df_filtrado["Factura"] != "NA"]
 
-        # Procesamiento del "Mes de Cobro"
-        if "Mes de Cobro" in df_filtrado.columns:
-            df_filtrado["Mes de Cobro"] = df_filtrado["Mes de Cobro"].astype(str)
-            df_filtrado[["mes", "año"]] = df_filtrado["Mes de Cobro"].str.split(" ", expand=True).fillna("")
+    # Procesamiento del "Mes de Cobro"
+    if "Mes de Cobro" in df_filtrado.columns:
+        df_filtrado["Mes de Cobro"] = df_filtrado["Mes de Cobro"].astype(str)
+        df_mes_anio = df_filtrado["Mes de Cobro"].str.split(" ", expand=True).fillna("")
+        df_mes_anio.columns = ["mes", "año"]
 
-            meses_dict = {
-                "enero": 1, "febrero": 2, "marzo": 3, "abril": 4, "mayo": 5, "junio": 6,
-                "julio": 7, "agosto": 8, "septiembre": 9, "octubre": 10, "noviembre": 11, "diciembre": 12
-            }
+        meses_dict = {
+            "enero": 1, "febrero": 2, "marzo": 3, "abril": 4, "mayo": 5, "junio": 6,
+            "julio": 7, "agosto": 8, "septiembre": 9, "octubre": 10, "noviembre": 11, "diciembre": 12
+        }
 
-            df_filtrado["mes"] = df_filtrado["mes"].str.lower().map(meses_dict)
-            df_filtrado["año"] = pd.to_numeric(df_filtrado["año"], errors='coerce')
+        df_mes_anio["mes"] = df_mes_anio["mes"].str.lower().map(meses_dict)
+        df_mes_anio["año"] = pd.to_numeric(df_mes_anio["año"], errors='coerce')
 
-            # Eliminar la columna "Mes de Cobro" después de procesarla
-            df_filtrado.drop(columns=["Mes de Cobro"], inplace=True)
+        # Agregar las columnas procesadas al DataFrame principal y eliminar "Mes de Cobro"
+        df_filtrado = df_filtrado.drop(columns=["Mes de Cobro"]).join(df_mes_anio)
 
-        # Agregar el nombre del archivo
-        df_filtrado.insert(0, "nombre_archivo", archivo.name)
+    # Agregar el nombre del archivo
+    df_filtrado.insert(0, "nombre_archivo", archivo.name)
 
-        st.success("✅ Archivo procesado correctamente.")
-        st.dataframe(df_filtrado)
+    st.success("✅ Archivo procesado correctamente.")
+    st.dataframe(df_filtrado)
 
-        # Botones de descarga
-        xlsx = generar_xlsx(df_filtrado)
-        st.download_button(label="📥 Descargar Excel", data=xlsx, file_name="cartera_procesada.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    # Botones de descarga
+    xlsx = generar_xlsx(df_filtrado)
+    st.download_button(label="📥 Descargar Excel", data=xlsx, file_name="cartera_procesada.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
-        csv = generar_csv(df_filtrado)
-        st.download_button(label="📥 Descargar CSV", data=csv, file_name="cartera_procesada.csv", mime="text/csv")
+    csv = generar_csv(df_filtrado)
+    st.download_button(label="📥 Descargar CSV", data=csv, file_name="cartera_procesada.csv", mime="text/csv")
+
 
 # ------------------- PANTALLA INICIO -------------------
 else:
