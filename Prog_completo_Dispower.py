@@ -122,8 +122,8 @@ elif opcion == "Cartera":
             df_filtrado["mes"] = df_filtrado["mes"].str.lower().map(meses_dict)
             df_filtrado["año"] = pd.to_numeric(df_filtrado["año"], errors='coerce')
 
-        # Eliminar la columna "Mes de Cobro" después de procesarla
-        df_filtrado.drop(columns=["Mes de Cobro"], inplace=True)
+            # Eliminar la columna "Mes de Cobro" después de procesarla
+            df_filtrado.drop(columns=["Mes de Cobro"], inplace=True)
 
         # Agregar el nombre del archivo
         df_filtrado.insert(0, "nombre_archivo", archivo.name)
