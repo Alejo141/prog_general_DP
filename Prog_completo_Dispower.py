@@ -123,8 +123,9 @@ elif opcion == "Cartera":
             df_mes_anio["mes"] = df_mes_anio["mes"].str.lower().map(meses_dict)
             df_mes_anio["año"] = pd.to_numeric(df_mes_anio["año"], errors='coerce')
 
-            # Agregar las columnas procesadas al DataFrame principal y eliminar "Mes de Cobro"
-            df_filtrado = df_filtrado.drop(columns=["Mes de Cobro"]).join(df_mes_anio)
+            # Unir las columnas procesadas al DataFrame y eliminar "Mes de Cobro"
+            df_filtrado = df_filtrado.drop(columns=["Mes de Cobro"]).reset_index(drop=True)
+            df_filtrado = pd.concat([df_filtrado, df_mes_anio], axis=1)
 
         # Agregar el nombre del archivo
         df_filtrado.insert(0, "nombre_archivo", archivo.name)
@@ -138,6 +139,7 @@ elif opcion == "Cartera":
 
         csv = generar_csv(df_filtrado)
         st.download_button(label="📥 Descargar CSV", data=csv, file_name="cartera_procesada.csv", mime="text/csv")
+
 
 # ------------------- PANTALLA INICIO -------------------
 else:
