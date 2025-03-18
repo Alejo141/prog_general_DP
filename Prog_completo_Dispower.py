@@ -68,6 +68,11 @@ if opcion == "Facturación":
             df_filtrado["address"] = df_filtrado["address"].astype(str).str.upper()  # Convertir a mayúsculas
             df_filtrado["address"] = df_filtrado["address"].apply(lambda x: unidecode.unidecode(x))  # Eliminar tildes
 
+         # Reemplazar valores vacíos en p_inicial, p_final y fechaemi con el valor anterior
+        for col in ["p_inicial", "p_final", "fechaemi"]:
+            if col in df_filtrado.columns:
+                df_filtrado[col] = df_filtrado[col].replace("NA", pd.NA).fillna(method="ffill")
+
         st.success("✅ Archivo procesado correctamente.")
         st.dataframe(df_filtrado)
 
