@@ -89,8 +89,12 @@ if opcion == "Facturación":
         cantidad_eliminados = df_filtrado[df_filtrado["address"] == "SAN VICENTE DEL CAGUAN"].shape[0]
         # Eliminar registros con SAN VICENTE DEL CAGUAN
         df_filtrado = df_filtrado[df_filtrado["address"] != "SAN VICENTE DEL CAGUAN"]
+        # Contar registros restantes
+        cantidad_restantes = df_filtrado.shape[0]
+
         # Mostrar en Streamlit
         st.warning(f"🗑️ Registros eliminados con 'SAN VICENTE DEL CAGUAN': {cantidad_eliminados}")
+        st.info(f"📊 Registros restantes después del filtrado: {cantidad_restantes}")
 
          # Reemplazar valores vacíos en p_inicial, p_final y fechaemi con el valor anterior
         for col in ["p_inicial", "p_final", "fechaemi"]:
