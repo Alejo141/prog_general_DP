@@ -78,7 +78,10 @@ if opcion == "Facturación":
                 "GUAINIA LA GUADALUPE": "GUAINIA",
                 "GUAINIA MORICHAL": "GUAINIA",
                 "GUAINIA SAN JOSE": "GUAINIA",
-                "GUAINIA PTO. COLOMBIA": "GUAINIA"
+                "GUAINIA PTO. COLOMBIA": "GUAINIA",
+                "PUERTO ASIS 44": "PUERTO ASIS",
+                "PUERTO ASIS 45": "PUERTO ASIS",
+                "PUERTO ASIS 65": "PUERTO ASIS"
             })
 
         # 🔁 Cambiar address si nui es 181503840
