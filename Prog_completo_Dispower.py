@@ -68,6 +68,17 @@ if opcion == "Facturación":
             df_filtrado["address"] = df_filtrado["address"].astype(str).str.upper()  # Convertir a mayúsculas
             df_filtrado["address"] = df_filtrado["address"].apply(lambda x: unidecode.unidecode(x))  # Eliminar tildes
 
+         # 🚨 Reemplazos especiales
+            df_filtrado["address"] = df_filtrado["address"].replace({
+                "CUMARIBO 250": "CUMARIBO",
+                "CUMARIBO 235": "CUMARIBO",
+                "YUTAHO": "MAICAO"
+            })
+
+        # 🔁 Cambiar address si nui es 181503840
+        if "nui" in df_filtrado.columns and "address" in df_filtrado.columns:
+            df_filtrado.loc[df_filtrado["nui"] == "181503840", "address"] = "CARTAGENA DEL CHAIRA"
+
          # Reemplazar valores vacíos en p_inicial, p_final y fechaemi con el valor anterior
         for col in ["p_inicial", "p_final", "fechaemi"]:
             if col in df_filtrado.columns:
