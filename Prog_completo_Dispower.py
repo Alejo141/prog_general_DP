@@ -97,13 +97,13 @@ if opcion == "Facturación":
 
         with col1:
             st.warning(f"🗑️ Registros eliminados con 'SAN VICENTE DEL CAGUAN': {cantidad_eliminados}")
+        with col2:
             st.info(f"📊 Registros restantes después del filtrado: {cantidad_restantes}")
         
+        valores_address = sorted(df_filtrado["address"].unique())
+            
         # Mostrar valores únicos restantes en 'address' en tres columnas
-        with col2:
-            valores_address = sorted(df_filtrado["address"].unique())
-            st.success("📍 Valores únicos restantes en 'address':")
-        
+        st.success("📍 Valores únicos restantes en 'address':")
         # Crear columnas
         col1, col2, col3 = st.columns(3)
         
