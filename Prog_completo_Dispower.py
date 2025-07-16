@@ -96,6 +96,11 @@ if opcion == "Facturación":
         st.warning(f"🗑️ Registros eliminados con 'SAN VICENTE DEL CAGUAN': {cantidad_eliminados}")
         st.info(f"📊 Registros restantes después del filtrado: {cantidad_restantes}")
 
+        # Mostrar valores únicos restantes en 'address'
+        valores_address = sorted(df_filtrado["address"].unique())
+        st.success(f"📍 Valores únicos restantes en 'address':")
+        st.write(valores_address)
+
          # Reemplazar valores vacíos en p_inicial, p_final y fechaemi con el valor anterior
         for col in ["p_inicial", "p_final", "fechaemi"]:
             if col in df_filtrado.columns:
