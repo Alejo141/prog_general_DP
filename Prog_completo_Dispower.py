@@ -95,11 +95,31 @@ if opcion == "Facturación":
         # Mostrar en Streamlit
         st.warning(f"🗑️ Registros eliminados con 'SAN VICENTE DEL CAGUAN': {cantidad_eliminados}")
         st.info(f"📊 Registros restantes después del filtrado: {cantidad_restantes}")
-
-        # Mostrar valores únicos restantes en 'address'
+        
+        # Mostrar valores únicos restantes en 'address' en tres columnas
         valores_address = sorted(df_filtrado["address"].unique())
-        st.success(f"📍 Valores únicos restantes en 'address':")
-        st.write(valores_address)
+        st.success("📍 Valores únicos restantes en 'address':")
+        
+        # Crear columnas
+        col1, col2, col3 = st.columns(3)
+        
+        # Repartir los valores en 3 listas equilibradas
+        valores_col1 = valores_address[::3]
+        valores_col2 = valores_address[1::3]
+        valores_col3 = valores_address[2::3]
+        
+        # Mostrar en cada columna
+        with col1:
+            for val in valores_col1:
+                st.write(val)
+        
+        with col2:
+            for val in valores_col2:
+                st.write(val)
+        
+        with col3:
+            for val in valores_col3:
+                st.write(val)
 
          # Reemplazar valores vacíos en p_inicial, p_final y fechaemi con el valor anterior
         for col in ["p_inicial", "p_final", "fechaemi"]:
