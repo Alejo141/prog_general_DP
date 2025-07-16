@@ -95,12 +95,12 @@ if opcion == "Facturación":
         # Mostrar en Streamlit
         col1, col2 = st.columns(2)
 
-        col1:
+        with col1:
             st.warning(f"🗑️ Registros eliminados con 'SAN VICENTE DEL CAGUAN': {cantidad_eliminados}")
             st.info(f"📊 Registros restantes después del filtrado: {cantidad_restantes}")
         
         # Mostrar valores únicos restantes en 'address' en tres columnas
-        col2:
+        with col2:
             valores_address = sorted(df_filtrado["address"].unique())
             st.success("📍 Valores únicos restantes en 'address':")
         
