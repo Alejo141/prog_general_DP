@@ -72,7 +72,13 @@ if opcion == "Facturación":
             df_filtrado["address"] = df_filtrado["address"].replace({
                 "CUMARIBO 250": "CUMARIBO",
                 "CUMARIBO 235": "CUMARIBO",
-                "YUTAHO": "MAICAO"
+                "YUTAHO": "MAICAO",
+                "GUAINIA INIRIDA": "GUAINIA",
+                "GUAINIA PTO. COLOMBIA": "GUAINIA",
+                "GUAINIA LA GUADALUPE": "GUAINIA",
+                "GUAINIA MORICHAL": "GUAINIA",
+                "GUAINIA SAN JOSE": "GUAINIA",
+                "GUAINIA PTO. COLOMBIA": "GUAINIA"
             })
 
         # 🔁 Cambiar address si nui es 181503840
