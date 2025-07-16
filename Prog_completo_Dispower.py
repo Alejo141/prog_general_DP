@@ -85,6 +85,9 @@ if opcion == "Facturación":
         if "nui" in df_filtrado.columns and "address" in df_filtrado.columns:
             df_filtrado.loc[df_filtrado["nui"] == "181503840", "address"] = "CARTAGENA DEL CHAIRA"
 
+        # Eliminar registros con address = SAN VICENTE DEL CAGUAN
+        df_filtrado = df_filtrado[df_filtrado["address"] != "SAN VICENTE DEL CAGUAN"]
+
          # Reemplazar valores vacíos en p_inicial, p_final y fechaemi con el valor anterior
         for col in ["p_inicial", "p_final", "fechaemi"]:
             if col in df_filtrado.columns:
