@@ -93,12 +93,16 @@ if opcion == "Facturación":
         cantidad_restantes = df_filtrado.shape[0]
 
         # Mostrar en Streamlit
-        st.warning(f"🗑️ Registros eliminados con 'SAN VICENTE DEL CAGUAN': {cantidad_eliminados}")
-        st.info(f"📊 Registros restantes después del filtrado: {cantidad_restantes}")
+        col1, col2 = st.columns(2)
+
+        col1:
+            st.warning(f"🗑️ Registros eliminados con 'SAN VICENTE DEL CAGUAN': {cantidad_eliminados}")
+            st.info(f"📊 Registros restantes después del filtrado: {cantidad_restantes}")
         
         # Mostrar valores únicos restantes en 'address' en tres columnas
-        valores_address = sorted(df_filtrado["address"].unique())
-        st.success("📍 Valores únicos restantes en 'address':")
+        col2:
+            valores_address = sorted(df_filtrado["address"].unique())
+            st.success("📍 Valores únicos restantes en 'address':")
         
         # Crear columnas
         col1, col2, col3 = st.columns(3)
